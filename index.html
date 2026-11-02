@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101512">
+  <meta name="description" content="Rubiks Appy by Ron — a clean, mobile-friendly Rubik's Cube playground, timer and tournament tracker.">
+  <title>Rubiks Appy — by Ron</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#cube" aria-label="Rubiks Appy home" data-tab-link="cube">
+        <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 40 40"><rect x="4" y="4" width="32" height="32" rx="9" fill="#b9ed78"/><path d="M12 12h7v7h-7zm9 0h7v7h-7zm-9 9h7v7h-7zm9 0h7v7h-7z" fill="#142018"/></svg></span>
+        <span class="brand-copy"><strong>Rubiks Appy</strong><small>BY RON</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-tab="cube">Cube</button>
+        <button class="nav-item" data-tab="timer">Timer</button>
+        <button class="nav-item" data-tab="tournament">Tournament</button>
+        <button class="nav-item" data-tab="solver">Solver</button>
+        <button class="nav-item" data-tab="settings">Settings</button>
+      </nav>
+      <div class="top-actions">
+        <button class="icon-button" id="soundToggle" title="Toggle turn sound" aria-label="Toggle turn sound"><span id="soundIcon">♫</span></button>
+        <button class="icon-button" id="fullscreenButton" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="page active" id="page-cube" aria-labelledby="cubeTitle">
+        <div class="page-heading">
+          <div><p class="eyebrow">PLAYGROUND</p><h1 id="cubeTitle">Your cube, your pace.</h1><p class="muted">Turn, explore and practice without the clutter.</p></div>
+          <label class="select-wrap"><span>Mode</span><select id="playMode"><option value="free">Free play</option><option value="easy">Easy turns</option><option value="zen">Zen mode</option></select></label>
+        </div>
+
+        <div class="cube-layout">
+          <section class="surface cube-stage-card">
+            <div class="stage-topline">
+              <div><span class="live-dot"></span><span id="cubeStatus">Ready to turn</span></div>
+              <span class="cube-size-label" id="currentSizeLabel">3 × 3</span>
+            </div>
+            <div class="size-strip" role="group" aria-label="Cube size">
+              <button class="size-chip" data-size="2">2×2</button>
+              <button class="size-chip active" data-size="3">3×3</button>
+              <button class="size-chip" data-size="4">4×4</button>
+              <button class="size-chip" data-size="5">5×5</button>
+              <button class="size-chip" data-size="10">10×10</button>
+              <button class="size-chip" data-size="100">100×100</button>
+            </div>
+            <div class="canvas-shell" id="canvasShell">
+              <canvas id="cubeCanvas" aria-label="Interactive 3D Rubik's Cube. Drag to rotate the view."></canvas>
+              <div class="canvas-top-badge" id="canvasBadge">3×3 · FREE PLAY</div>
+              <div class="canvas-hint" id="canvasHint"><span aria-hidden="true">↗</span> Drag to inspect · Use buttons below to turn</div>
+            </div>
+            <div class="control-dock" id="controlDock">
+              <div class="dock-heading"><div><strong>Turn controls</strong><small id="controlHint">Tap a face to turn it</small></div><span class="dock-key">TOUCH READY</span></div>
+              <div class="face-control-grid" id="faceControlGrid">
+                <div class="face-control"><span class="face-id"><i class="face-dot face-U"></i><b>U</b><small>UP</small></span><button class="turn-button" data-move="U" data-dir="1" aria-label="Turn Up clockwise">↻</button><button class="turn-button reverse" data-move="U" data-dir="-1" aria-label="Turn Up counterclockwise">↺</button></div>
+                <div class="face-control"><span class="face-id"><i class="face-dot face-R"></i><b>R</b><small>RIGHT</small></span><button class="turn-button" data-move="R" data-dir="1" aria-label="Turn Right clockwise">↻</button><button class="turn-button reverse" data-move="R" data-dir="-1" aria-label="Turn Right counterclockwise">↺</button></div>
+                <div class="face-control"><span class="face-id"><i class="face-dot face-F"></i><b>F</b><small>FRONT</small></span><button class="turn-button" data-move="F" data-dir="1" aria-label="Turn Front clockwise">↻</button><button class="turn-button reverse" data-move="F" data-dir="-1" aria-label="Turn Front counterclockwise">↺</button></div>
+                <div class="face-control"><span class="face-id"><i class="face-dot face-L"></i><b>L</b><small>LEFT</small></span><button class="turn-button" data-move="L" data-dir="1" aria-label="Turn Left clockwise">↻</button><button class="turn-button reverse" data-move="L" data-dir="-1" aria-label="Turn Left counterclockwise">↺</button></div>
+                <div class="face-control"><span class="face-id"><i class="face-dot face-D"></i><b>D</b><small>DOWN</small></span><button class="turn-button" data-move="D" data-dir="1" aria-label="Turn Down clockwise">↻</button><button class="turn-button reverse" data-move="D" data-dir="-1" aria-label="Turn Down counterclockwise">↺</button></div>
+                <div class="face-control"><span class="face-id"><i class="face-dot face-B"></i><b>B</b><small>BACK</small></span><button class="turn-button" data-move="B" data-dir="1" aria-label="Turn Back clockwise">↻</button><button class="turn-button reverse" data-move="B" data-dir="-1" aria-label="Turn Back counterclockwise">↺</button></div>
+              </div>
+              <div class="easy-turn-strip" id="easyTurnStrip" hidden>
+                <button data-move="U" data-dir="1">↑ UP</button><button data-move="L" data-dir="1">← LEFT</button><button data-move="F" data-dir="1">● FRONT</button><button data-move="R" data-dir="1">RIGHT →</button><button data-move="D" data-dir="1">↓ DOWN</button><button data-move="B" data-dir="1">BACK ◎</button>
+              </div>
+            </div>
+            <div class="stage-actions">
+              <button class="button button-primary" id="scrambleButton">⤨ <span>Scramble</span></button>
+              <button class="button" id="undoButton">↶ <span>Undo</span></button>
+              <button class="button" id="resetButton">↻ <span>Reset</span></button>
+              <button class="button button-quiet" id="randomButton">Random move</button>
+            </div>
+          </section>
+
+          <aside class="side-stack">
+            <section class="surface info-card">
+              <div class="card-heading"><div><p class="eyebrow">SESSION</p><h2>At a glance</h2></div><span class="soft-icon">◫</span></div>
+              <div class="stat-grid"><div class="stat"><span>Moves</span><strong id="moveCount">0</strong></div><div class="stat"><span>Cube size</span><strong id="statSize">3×3</strong></div></div>
+              <div class="scramble-block"><div class="inline-heading"><span>Current scramble</span><button class="text-button" id="copyScrambleButton">Copy</button></div><p id="scrambleText">Ready when you are.</p></div>
+              <div class="scramble-block"><div class="inline-heading"><span>Latest moves</span><button class="text-button" id="clearMovesButton">Clear</button></div><p class="move-log" id="moveLog">No moves yet.</p></div>
+            </section>
+            <section class="surface mode-card">
+              <p class="eyebrow">QUICK START</p><h2>Pick your pace</h2>
+              <button class="mode-option active" data-mode="free"><span class="mode-symbol">✳</span><span><b>Free play</b><small>All controls and moves</small></span><span class="mode-check">✓</span></button>
+              <button class="mode-option" data-mode="easy"><span class="mode-symbol">☝</span><span><b>Easy turns</b><small>Big, simple turn buttons</small></span><span class="mode-check">✓</span></button>
+              <button class="mode-option" data-mode="zen"><span class="mode-symbol">◌</span><span><b>Zen mode</b><small>Quiet, slower practice</small></span><span class="mode-check">✓</span></button>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-timer" aria-labelledby="timerTitle">
+        <div class="page-heading"><div><p class="eyebrow">PRACTICE</p><h1 id="timerTitle">Simple solve timer</h1><p class="muted">Start, stop and keep your best times.</p></div><span class="page-pill">LOCAL RECORDS</span></div>
+        <div class="timer-layout">
+          <section class="surface timer-main-card">
+            <div class="timer-topline"><span class="live-dot" id="timerLiveDot"></span><span id="timerState">READY</span><span class="timer-size" id="timerSize">3×3</span></div>
+            <div class="timer-display" id="timerDisplay" role="timer" aria-live="off">00:00.00</div>
+            <p class="timer-instruction" id="timerInstruction">Tap Start or press Space to begin.</p>
+            <div class="timer-controls"><button class="button button-primary timer-start" id="timerStartButton">Start</button><button class="button" id="timerResetButton">Reset</button><button class="button" id="timerSaveButton" disabled>Save time</button></div>
+            <div class="scramble-block timer-scramble"><div class="inline-heading"><span>Practice scramble</span><button class="text-button" id="newTimerScramble">New scramble</button></div><p id="timerScrambleText">R U R' U' F2 D L2 B U2</p></div>
+            <div class="keyboard-tip">⌨ Space = start / stop <span>·</span> Esc = reset</div>
+          </section>
+          <aside class="side-stack">
+            <section class="surface info-card"><div class="card-heading"><div><p class="eyebrow">YOUR STATS</p><h2>Personal best</h2></div><span class="soft-icon">◷</span></div><div class="best-time" id="personalBest">—</div><div class="stat-grid"><div class="stat"><span>Solves saved</span><strong id="totalSolves">0</strong></div><div class="stat"><span>Average</span><strong id="averageTime">—</strong></div></div></section>
+            <section class="surface info-card"><div class="inline-heading"><h2>Recent solves</h2><button class="text-button" id="clearTimerRecords">Clear all</button></div><div class="record-list" id="timerRecordList"><p class="empty-state">Your saved times will appear here.</p></div></section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-tournament" aria-labelledby="tournamentTitle">
+        <div class="page-heading"><div><p class="eyebrow">CHALLENGE</p><h1 id="tournamentTitle">Mini tournament</h1><p class="muted">A simple five-solve session. Your results stay on this device.</p></div><span class="page-pill">5 ROUNDS · AO5</span></div>
+        <div class="tournament-layout">
+          <section class="surface tournament-card">
+            <div class="tournament-head"><div><p class="eyebrow">CURRENT SESSION</p><h2 id="tournamentStatus">Ready when you are</h2></div><div class="round-counter" id="roundCounter">0<span>/5</span></div></div>
+            <div class="round-track" id="roundTrack"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="tournament-scramble"><div class="inline-heading"><span>Round scramble</span><button class="text-button" id="newTournamentScramble">Refresh</button></div><p id="tournamentScrambleText">Start a tournament to generate your first scramble.</p></div>
+            <div class="tournament-time"><span>Current time</span><strong id="tournamentTimerDisplay">00:00.00</strong></div>
+            <div class="timer-controls"><button class="button button-primary" id="tournamentStartButton">Start round</button><button class="button" id="tournamentResetButton">Reset round</button><button class="button" id="tournamentSaveButton" disabled>Save round</button></div>
+            <div class="tournament-footer"><button class="button button-quiet" id="tournamentNewButton">＋ New tournament</button><span id="tournamentHint">Complete five solves to see your result.</span></div>
+          </section>
+          <aside class="side-stack">
+            <section class="surface info-card"><p class="eyebrow">SESSION RESULT</p><h2>Average of 5</h2><div class="best-time" id="ao5Display">—</div><div class="stat-grid"><div class="stat"><span>Best</span><strong id="tournamentBest">—</strong></div><div class="stat"><span>Worst</span><strong id="tournamentWorst">—</strong></div></div></section>
+            <section class="surface info-card"><div class="inline-heading"><h2>Round times</h2><button class="text-button" id="clearTournamentHistory">Clear history</button></div><div class="round-list" id="roundList"><p class="empty-state">No rounds recorded yet.</p></div></section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-solver" aria-labelledby="solverTitle">
+        <div class="page-heading"><div><p class="eyebrow">MOVE HELPER</p><h1 id="solverTitle">Scramble reverser</h1><p class="muted">Enter a known scramble and animate its inverse.</p></div><span class="page-pill">SEQUENCE BASED</span></div>
+        <div class="solver-layout">
+          <section class="surface solver-card">
+            <label for="solverInput" class="field-label">Scramble sequence</label>
+            <textarea id="solverInput" rows="4" placeholder="R U R' U' F2 D L2">M > R > U > L > D</textarea>
+            <p class="field-hint">Supports F, B, R, L, U, D, M, E, S, wide turns (Rw) and reverse / half turns.</p>
+            <div class="solver-buttons"><button class="button button-primary" id="applyScrambleButton">Apply sequence</button><button class="button" id="loadCurrentScrambleButton">Load current scramble</button><button class="button" id="autoSolveButton">Auto solve ↶</button></div>
+            <div class="solver-result"><span class="eyebrow">INVERSE SEQUENCE</span><p id="inverseSequence">D' L' U' R' M'</p></div>
+            <p class="solver-status" id="solverStatus" role="status">Enter the moves that created the scramble. Auto solve plays them backwards.</p>
+          </section>
+          <aside class="surface solver-help"><p class="eyebrow">QUICK GUIDE</p><h2>Move notation</h2><dl><div><dt>R / R'</dt><dd>Right clockwise / reverse</dd></div><div><dt>U / U'</dt><dd>Up clockwise / reverse</dd></div><div><dt>F2</dt><dd>Front half turn</dd></div><div><dt>M</dt><dd>Middle slice (also accepts “main”)</dd></div><div><dt>Rw</dt><dd>Two right layers together</dd></div></dl><p class="note-callout">This tool reverses a known scramble sequence. It does not inspect unknown sticker colors or calculate a full solution for a hand-scrambled cube.</p></aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-settings" aria-labelledby="settingsTitle">
+        <div class="page-heading"><div><p class="eyebrow">PERSONALIZE</p><h1 id="settingsTitle">Make it yours.</h1><p class="muted">Simple controls, your colors and your sound.</p></div><span class="page-pill">SAVED ON DEVICE</span></div>
+        <div class="settings-layout">
+          <section class="surface settings-card"><p class="eyebrow">APPEARANCE</p><h2>Cube colors</h2><div class="palette-row"><label for="paletteSelect">Color theme</label><select id="paletteSelect"><option value="classic">Classic</option><option value="pastel">Pastel</option><option value="neon">Neon</option><option value="ocean">Ocean</option><option value="sunset">Sunset</option><option value="custom">Custom</option></select></div><div class="color-picker-grid" id="colorPickerGrid"></div><div class="setting-slider"><label for="cornerRange">Rounded sticker corners <output id="cornerValue">18%</output></label><input id="cornerRange" type="range" min="0" max="38" value="18"></div><div class="setting-slider"><label for="gapRange">Sticker spacing <output id="gapValue">8%</output></label><input id="gapRange" type="range" min="2" max="18" value="8"></div><div class="palette-row"><label for="accentPicker">App accent</label><input type="color" id="accentPicker" value="#b9ed78"></div></section>
+          <section class="surface settings-card"><p class="eyebrow">FEEL</p><h2>Sound & movement</h2><div class="setting-row"><div><b>Relaxing turn sound</b><small>A soft, gentle click on each turn</small></div><input type="checkbox" id="soundSetting" checked></div><div class="setting-slider"><label for="volumeRange">Sound volume <output id="volumeValue">28%</output></label><input id="volumeRange" type="range" min="0" max="100" value="28"></div><div class="setting-row"><div><b>Smooth animations</b><small>Animate each move</small></div><input type="checkbox" id="smoothSetting" checked></div><div class="setting-slider"><label for="speedRange">Turn duration <output id="speedValue">180 ms</output></label><input id="speedRange" type="range" min="80" max="420" step="10" value="180"></div><div class="setting-row"><div><b>Vibration</b><small>Small haptic feedback on supported devices</small></div><input type="checkbox" id="vibrationSetting"></div><div class="setting-row"><div><b>Show move hints</b><small>Display the canvas instruction</small></div><input type="checkbox" id="hintsSetting" checked></div></section>
+          <section class="surface settings-card"><p class="eyebrow">APP</p><h2>Preferences</h2><div class="setting-row"><div><b>Keep screen awake</b><small>Best effort while practicing (browser support varies)</small></div><input type="checkbox" id="wakeLockSetting"></div><div class="setting-row"><div><b>Reduce motion</b><small>Use shorter transitions</small></div><input type="checkbox" id="reduceMotionSetting"></div><button class="button button-danger" id="resetSettingsButton">Reset settings to default</button></section>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-tab="cube"><span>▦</span><small>Cube</small></button>
+      <button class="mobile-nav-item" data-tab="timer"><span>◷</span><small>Timer</small></button>
+      <button class="mobile-nav-item" data-tab="tournament"><span>♜</span><small>Event</small></button>
+      <button class="mobile-nav-item" data-tab="solver"><span>↶</span><small>Solver</small></button>
+      <button class="mobile-nav-item" data-tab="settings"><span>⚙</span><small>Settings</small></button>
+    </nav>
+    <footer class="app-footer">Made for cube lovers <span>·</span> <b>Rubiks Appy</b> by Ron <span>·</span> Works on GitHub Pages</footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

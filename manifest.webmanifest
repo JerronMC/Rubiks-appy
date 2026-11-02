@@ -1,0 +1,10 @@
+{
+  "name": "Rubiks Appy by Ron",
+  "short_name": "Rubiks Appy",
+  "description": "A clean cube playground, solve timer and mini tournament tracker.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#101512",
+  "theme_color": "#101512",
+  "icons": [{"src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}

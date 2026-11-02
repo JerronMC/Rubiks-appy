@@ -1,0 +1,8 @@
+{
+  "name": "rubiks-appy",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Rubiks Appy by Ron — static cube playground, timer and tournament.",
+  "scripts": { "test": "node --test" }
+}
